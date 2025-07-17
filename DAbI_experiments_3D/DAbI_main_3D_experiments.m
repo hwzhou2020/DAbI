@@ -30,7 +30,7 @@ warning off curvefit:fit:convertingY
 
 addpath(genpath("subFunctions"))
 %% Set up parameters
-folder              = 'Data'; % Calibration Data to be load
+folder              = 'Data'; 
 folder_name         = dir(folder);
 folder_name         = folder_name(3:end);
 z_defocus_matrix    = zeros(length(folder_name), 67);
