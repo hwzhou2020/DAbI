@@ -24,14 +24,12 @@
 
 % =========================================================================
 
-
-
 clc;clear all; close all;
 warning off curvefit:fit:convertingY
 
 addpath(genpath("subFunctions"))
 %% Set up parameters
-folder              = 'Data'; 
+folder              = 'Data'; % Calibration Data to be load
 folder_name         = dir(folder);
 folder_name         = folder_name(3:end);
 z_defocus_matrix    = zeros(length(folder_name), 67);
@@ -40,14 +38,14 @@ z_defocus_matrix    = zeros(length(folder_name), 67);
 load("system_parameters.mat")
 
 sub_pixel_resolve = true;
-patch_size = 1536;
+patch_size = 2048;
 vis_spec = false;
-
+precision = 0.1;
+max_iter = 10;
 use_GPU = true;
 if gpuDeviceCount("available") == 0
     useGPU = false;
 end
-
 %% Use DAbI to estimate defocus distance 
 for sample_idx = 1:length(folder_name)
     sample_name = folder_name(sample_idx).name;
@@ -74,23 +72,32 @@ for sample_idx = 1:length(folder_name)
 
 
     count = 1;
-    zlist = [0:5:50,60:10:430,455:25:855];
-    for z_pos = zlist            
+    zlist = [0:10:30,50:50:1200];
+    for z_pos = zlist          
         curr_z = num2str(floor((z_pos)*1000),"%06.0f");
-        filename = [filepath sample_name '_z_' curr_z '_nm.mat'];
+        filename = [filepath sample_name '_z_' curr_z '_nm_DAbI.mat'];
         load(filename)
         imlow_defocus = imlow_defocus(1024-patch_size/2+1:1024+patch_size/2,1024-patch_size/2+1:1024+patch_size/2,:);
     
         if vis_spec
             idx_r = na_obj / (1 / (patch_size * dpix_c / mag)) / wavelength;
-            Fimlow = mat2gray(log(1+abs(fftshift(fft2(double(1*imlow_defocus(:,:,1))+1*double(imlow_defocus(:,:,2)))))));
+            Fimlow = mat2gray(log(1+abs(fftshift(fft2(double(1*imlow_defocus(:,:,1))+0*double(imlow_defocus(:,:,2)))))));
             figure(1284);
             colormap(gray);
             clf;
             imshow(Fimlow,[])
             hold on;
-            viscircles(freqXY_calib_show(1, :), idx_r, 'LineStyle', '--', 'EdgeColor', 'r');
-            viscircles(freqXY_calib_show(2, :), idx_r, 'LineStyle', '--', 'EdgeColor', 'b');
+            viscircles(freqXY_calib_show(1, :), idx_r, 'LineStyle', '--', 'EdgeColor', 'r', 'Linewidth',0.5);
+            % viscircles(freqXY_calib_show(2, :), idx_r, 'LineStyle', '--', 'EdgeColor', 'b', 'Linewidth',0.5);
+            drawnow;
+            Fimlow = mat2gray(log(1+abs(fftshift(fft2(double(0*imlow_defocus(:,:,1))+1*double(imlow_defocus(:,:,2)))))));
+            figure(1285);
+            colormap(gray);
+            clf;
+            imshow(Fimlow,[])
+            hold on;
+            % viscircles(freqXY_calib_show(1, :), idx_r, 'LineStyle', '--', 'EdgeColor', 'r', 'Linewidth',0.5);
+            viscircles(freqXY_calib_show(2, :), idx_r, 'LineStyle', '--', 'EdgeColor', 'b', 'Linewidth',0.5);
             drawnow;
         end
 
@@ -105,7 +112,7 @@ for sample_idx = 1:length(folder_name)
             CTF = single(CTF);
         end
         tic
-        z_defocus = findDefocus_DAbI(imlow_defocus, freqXY_calib, CTF, na_illu, na_obj, wavelength, mag, dpix_c, sub_pixel_resolve,use_GPU);
+        z_defocus = findDefocus_DAbI(imlow_defocus, freqXY_calib, CTF, na_illu, na_obj, wavelength, mag, dpix_c, sub_pixel_resolve,use_GPU,precision, max_iter);
         toc
         z_defocus_matrix(sample_idx, count) = z_defocus;
         count = count + 1;
@@ -120,7 +127,6 @@ for sample_idx = 1:length(folder_name)
     
     end
 end
-
 
 
 
