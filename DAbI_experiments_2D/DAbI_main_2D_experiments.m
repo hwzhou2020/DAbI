@@ -117,7 +117,7 @@ for sample_idx = 1:length(folder_name)
         z_defocus_matrix(sample_idx, count) = z_defocus;
         count = count + 1;
         
-        disp(['Real Z = ',num2str(z_pos)]);
+        disp(['Real Z = ',num2str(-z_pos)]);
         if z_defocus == 0
             disp('Calculated Z = 0');
         else

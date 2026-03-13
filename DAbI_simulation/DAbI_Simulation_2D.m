@@ -42,12 +42,12 @@ logamp = @(x) log10(abs(x)+1); % Log operation for spectrum visualization
 
 %% Simulation parameters setting
 
-defocus         = [200];   % Defocus distances (um) (Symbol: ∆z)
+defocus         = [50];   % Defocus distances (um) (Symbol: ∆z)
                             % Can have multiple values for a loop
                             
 % General imaging parameters
 mag             = 20;       % System magnification        
-na_illu         = 0.39;     % Illumination NA （Symbol: sinβ<na_obj）   
+na_illu         = 0.382;     % Illumination NA （Symbol: sinβ<na_obj）   
 na_obj          = 0.40;     % Objective lens NA
 dpix_c          = 6.5;      % Camera pixel pitch (um) (Symbol: e)
 wavelength      = 0.520;    % Wavelength (um)
@@ -56,7 +56,7 @@ object_type     = "NSCLC";  % Options: "NSCLC" | "USAF"
 obj_size        = 3072;     % Ground truth object size (<=3072)
 
 % illumination settings
-angle2use       = [pi/8, 3*pi/8];   
+angle2use       = [pi/8, 3*pi/8]+pi/16;   
                             % The two azimuthal illumination angles 
                             % (Symbol: θ1 and θ2)
 
@@ -67,7 +67,6 @@ zernike_coeffs  = zeros(1, 34);
                             % https://en.wikipedia.org/wiki/Zernike_polynomials
 zernike_coeffs(4) = 0;      % Defocus aberration is already added in  
                             % "defocus". This term is set to 0
-
 % GPU usage for reconstruction
 use_GPU         = false;
 
@@ -76,9 +75,9 @@ save_raw        = true;     % Save raw intensity image data
 save_dir        = './Simulated_Data'; % Save directory
 show_LEDs       = false;    % Visualize LED illumination angle in NA space
 show_obj        = false;    % Visualize ground truth object
-show_abe        = false;    % Visualize system aberration
+show_abe        = true;    % Visualize system aberration
 show_raw        = false;    % Visualize the two intensity images (I1,I2)
-show_fringe     = false;    % Visualize DAbI fringes (summed spectrum)
+show_fringe     = true;    % Visualize DAbI fringes (summed spectrum)
 
 % Algorithm parameters (Only at the last section: Perform DAbI)
 sub_pixel_resolve = true;   % Whether to use sub-pixel precision 
@@ -192,7 +191,7 @@ for iz = 1:length(defocus)
     if show_abe
         figure(1003);imagesc(phi_aberration);
         axis off;axis image;
-        title('Aberration at pupil phase');
+        title('Other aberration at pupil phase');
         clim([-pi pi]);colormap(cNeoAlbedo);
     end
     

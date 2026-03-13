@@ -45,7 +45,7 @@ addpath(genpath('Subfunctions_DAbI'));
 
 %% Simulation parameters setting
 
-defocus     = 200;        % unit: um. Defocus distances (Symbol: ∆z)
+defocus     = 20;        % unit: um. Defocus distances (Symbol: ∆z)
 
 % General imaging parameters
 mag         = 20;         % magnification of the objective lens
@@ -63,6 +63,7 @@ if gpuDeviceCount("available") == 0
 end
 
 % Simulated object parameters
+load("cell.mat")
 xsize       = 2048;       % unit: pixel
 ysize       = 2048;       % unit: pixel. Prefer to be the same as xsize
 
@@ -103,21 +104,6 @@ if save_raw
 end
 
 %% Design ground truth object
-% Load sample data
-sam = [];
-disp('-------Sample Loading------')
-tic
-for i = 1:5
-    filename = sprintf('sam_%d.mat', i);
-    data = load(filename);
-    sam = cat(3, sam, data.sam_part);
-end
-sam = double(sam);
-toc
-
-disp('------Sample Loaded------')
-disp('------Image Generation------')
-tic
 % Ensure samLayers and zsize are positive integers
 assert(samLayers > 0 && zsize >= samLayers, 'Invalid layer sizes');
 % Get the center plane of the input stack
@@ -182,9 +168,6 @@ end
 % measurements on the camera  
 imlow_defocus = imagingMultiSlice(obj,kIllu,CTF,lambda*1e3,pixelSizeXY,pixelSizeZ,defocus, ...
                             'n',n_media,'gpu',useGPU);
-
-toc
-disp('------Image Generation Done------')
 % Visualize the two intensity images (I1,I2)
 if show_raw
     figure(10031);
@@ -220,8 +203,7 @@ else
     kIllu = single(kIllu);
     CTF = single(CTF);
 end
-
-disp('------Start DAbI------')       
+        
 z_defocus = findDefocus_DAbI_3D(imlow_defocus, kIllu, CTF, na_illu, NA, ...
     lambda, mag, ps*mag, sub_pixel_resolve,useGPU,precision, max_iter);
 fprintf('DAbI Estimated z: %.4f\n', z_defocus);

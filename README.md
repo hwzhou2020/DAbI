@@ -1,14 +1,12 @@
-# DAbI: Digital defocus Aberration Interference
+# DAbI: Digital defocus Aberration Interference for automated optical microscopy
 
- We discovered an optical phenomenon that the digitally summed Fourier spectrum of two images acquired from two-angle illumination exhibits interference-like fringe modulation when the sample is out-of-focus. These digital fringes correlate directly with defocus through a physics-based relation. Based on this principle, we developed an automatic, efficient, and generalizable defocus detection method termed digital defocus aberration interference (DAbI).
+ We observed that the digitally summed Fourier spectrum of two images acquired from two-angle illumination exhibits interference-like fringe modulation when the sample is defocused. These digital fringes correlate directly with defocus through a physics-based relation. Based on this principle, we developed an automatic, efficient, and generalizable defocus detection method termed digital defocus aberration interference (DAbI).
+ 
 
 🌐 **[Project Page](https://hwzhou2020.github.io/DAbI-Web/)** 
 📄 **[arXiv Paper](https://arxiv.org/abs/2507.10867)**
 🧪 **[Data on OSF](https://osf.io/dvztc/)**  
 💻 **[Code on GitHub](https://github.com/hwzhou2020/DAbI)**
-
-
-Note: `.p` files are included for protected functions. They do not affect reproducibility. Full code will be released after publication.
 
 
 ## 📌 Publication Info
@@ -24,13 +22,33 @@ Note: `.p` files are included for protected functions. They do not affect reprod
 
 ---
 
+## Prerequisites
+
+- MATLAB
+- Image Processing Toolbox
+- Parallel Computing Toolbox (optional, only needed for GPU acceleration)
+
+The MATLAB scripts use relative paths. Run each script from its own folder rather than from the repository root.
+
 ## 🚀 Usage Instructions
 
 ### 🔬 Simulations
 
-Ready to go — download and run the code directly.
+The simulation examples are self-contained. This repository already includes the bundled sample assets:
 
-Customize your system parameters in the main simulation scripts:
+- `NSCLC.mat` and `USAF-pc200nm.png` for 2D simulation
+- `cell.mat` for 3D simulation
+
+Open MATLAB, change into the simulation folder, then run either script:
+
+```
+cd DAbI_simulation
+DAbI_Simulation_2D
+% or
+DAbI_Simulation_3D
+```
+
+Customize system parameters directly in:
 
 ```
 DAbI_simulation/DAbI_Simulation_2D.m
@@ -42,58 +60,60 @@ Download experimental data from:
 ```
 https://osf.io/dvztc/
 ```
-Place the data in the following folders:
+Create the following folders if they do not already exist, then place the downloaded data there:
 ```
 ./DAbI_experiments_2D/Data/ 
 ./DAbI_experiments_3D/Data/ 
 ```
-Then run:
+
+Then open MATLAB, change into the corresponding experiment folder, and run:
 ```
-DAbI_experiments_2D/DAbI_main_2D_experiments.m
-DAbI_experiments_3D/DAbI_main_3D_experiments.m
+cd DAbI_experiments_2D
+DAbI_main_2D_experiments
+
+cd ../DAbI_experiments_3D
+DAbI_main_3D_experiments
 ```
-Note: `.p` files are included for protected functions. They do not affect reproducibility. Full code will be released after publication.
 
 ---
 
-## 📁 File Structure and explanation
+## 📁 File Structure and Explanation
 ```
 ├── DAbI_experiments_2D
 │   ├── subFunctions
-│   │   ├── add_aberration_zernike.m        # Ddd additional aberrations
-│   │   ├── findDefocus_DAbI_Direction.p    # Get defocus direction
-│   │   ├── findDefocus_DAbI_FFT.p          # FFT method
-│   │   ├── findDefocus_DAbI.p              # DAbI function
-│   │   ├── subPixelFit.m                   
+│   │   ├── add_aberration_zernike.m        # Add additional aberrations
+│   │   ├── Data_generator.m
+│   │   ├── findDefocus_DAbI_Direction.m    # Get defocus direction
+│   │   ├── findDefocus_DAbI_FFT.m          # FFT-based method
+│   │   ├── findDefocus_DAbI.m              # Main DAbI function
+│   │   ├── subPixelFit.m
 │   │   └── system_parameters.mat
 │   ├── DAbI_main_2D_experiments.m          # Main script for 2D thin sample experiments 
-│   └── Data                                # Put 2D experimental raw data in this folder 
+│   └── Data                                # Put 2D experimental raw data here
 │
 ├── DAbI_experiments_3D
 │   ├── subFunctions
 │   │   ├── add_aberration_zernike.m
-│   │   ├── findDefocus_DAbI_3D.p
-│   │   ├── findDefocus_DAbI_Direction_3D.p
-│   │   ├── findDefocus_DAbI_FFT_3D.p
+│   │   ├── findDefocus_DAbI_3D.m
+│   │   ├── findDefocus_DAbI_Direction_3D.m
+│   │   ├── findDefocus_DAbI_FFT_3D.m
 │   │   ├── rowRangeCrop.m
 │   │   ├── subPixelFit.m
 │   │   └── system_parameters_3D.mat
 │   ├── DAbI_main_3D_experiments.m          # Main script for 3D thick sample experiments
-│   └── Data                                # Put 3D experimental raw data in this folder 
-│
+│   └── Data                                # Put 3D experimental raw data here
 │
 ├── DAbI_simulation
-│   ├── Simulated_Data                      # Folder to save intensity images
 │   ├── Subfunctions_DAbI
 │   │   ├── DAbI_2D
-│   │   │   ├── findDefocus_DAbI_Direction.p
-│   │   │   ├── findDefocus_DAbI_FFT.p
-│   │   │   ├── findDefocus_DAbI.p
+│   │   │   ├── findDefocus_DAbI_Direction.m
+│   │   │   ├── findDefocus_DAbI_FFT.m
+│   │   │   ├── findDefocus_DAbI.m
 │   │   │   └── subPixelFit.m
 │   │   └── DAbI_3D
-│   │       ├── findDefocus_DAbI_3D.p
-│   │       ├── findDefocus_DAbI_Direction_3D.p
-│   │       ├── findDefocus_DAbI_FFT_3D.p
+│   │       ├── findDefocus_DAbI_3D.m
+│   │       ├── findDefocus_DAbI_Direction_3D.m
+│   │       ├── findDefocus_DAbI_FFT_3D.m
 │   │       ├── rowRangeCrop.m
 │   │       └── subPixelFit.m
 │   ├── Subfunctions_Simulation
@@ -101,15 +121,14 @@ Note: `.p` files are included for protected functions. They do not affect reprod
 │   │   ├── calBoundary.m
 │   │   ├── cNeoAlbedo.m                    # Colormap
 │   │   ├── imagingMultiSlice.m             # 3D simulation forward model
-│   │   ├── NSCLC.mat                       # 2D simulation data non-small-cell lung cancer
-│   │   ├── sam_1.mat                       # 3D simulation data part 1-5
-│   │   ├── sam_2.mat
-│   │   ├── sam_3.mat
-│   │   ├── sam_4.mat
-│   │   ├── sam_5.mat
+│   │   ├── cell.mat                        # 3D simulation sample
+│   │   ├── NSCLC.mat                       # 2D simulation sample
 │   │   └── USAF-pc200nm.png                # USAF 2D simulation data
 │   ├── DAbI_Simulation_2D.m                # Main script for 2D simulation
 │   └── DAbI_Simulation_3D.m                # Main script for 3D simulation
+│
+├── DAbI_simulation/Simulated_Data          # Created automatically by 2D simulation when saving is enabled
+├── DAbI_simulation/Simulated_Data_3D       # Created automatically by 3D simulation when saving is enabled
 ├── LICENSE
 └── README.md
 ```
