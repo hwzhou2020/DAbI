@@ -39,6 +39,10 @@ The simulation examples are self-contained. This repository already includes the
 - `NSCLC.mat` and `USAF-pc200nm.png` for 2D simulation
 - `cell.mat` for 3D simulation
 
+`NSCLC.mat` and `cell.mat` are in the Subfucntions_Simulation folder in "https://osf.io/dvztc/". 
+
+Please move them to DAbI_simulation/Subfunctions_Simulation folder in this repository.
+
 Open MATLAB, change into the simulation folder, then run either script:
 
 ```
