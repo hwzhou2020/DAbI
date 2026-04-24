@@ -2,7 +2,7 @@
 
  We observed that the digitally summed Fourier spectrum of two images acquired from two-angle illumination exhibits interference-like fringe modulation when the sample is defocused. These digital fringes correlate directly with defocus through a physics-based relation. Based on this principle, we developed an automatic, efficient, and generalizable defocus detection method termed digital defocus aberration interference (DAbI).
  
-
+📑 **[Paper](https://doi.org/10.1038/s41467-026-72287-x)** 
 🌐 **[Project Page](https://hwzhou2020.github.io/DAbI-Web/)** 
 📄 **[arXiv Paper](https://arxiv.org/abs/2507.10867)**
 🧪 **[Data on OSF](https://osf.io/dvztc/)**  
@@ -15,6 +15,7 @@
 *Haowen Zhou\*, Shi Zhao\*, Yujie Fan, Zhenyu Dong, Oumeng Zhang, Viviana Gradinaru, Changhuei Yang*  
 (\* Equal contribution)
 
+- **Paper**: https://doi.org/10.1038/s41467-026-72287-x
 - **arXiv**: https://arxiv.org/abs/2507.10867  
 - **Project Page**: https://hwzhou2020.github.io/DAbI-Web/  
 - **Code**: https://github.com/hwzhou2020/DAbI  
@@ -151,6 +152,16 @@ szhao5@caltech.edu
 
 ## 📖 Citation
 If you find this work useful, please cite:
+```
+@article{Zhou2026DigitalDefocus,
+  author  = {Zhou, Haowen and Zhao, Shi and Fan, Yujie and Dong, Zhenyu and Zhang, Oumeng and Gradinaru, Viviana and Yang, Changhuei},
+  title   = {Digital defocus aberration interference for automated optical microscopy},
+  journal = {Nature Communications},
+  year    = {2026},
+  date    = {2026-04-24}
+}
+```
+
 ```
 @misc{zhou2025DAbI,
   title={Digital defocus aberration interference for automated optical microscopy}, 
